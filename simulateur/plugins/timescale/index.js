@@ -6,7 +6,7 @@ let seuils = {basic: 6.65, yout_visite: 20, basic_hs: 6}
 const { /*Pool,*/ Client } = require('pg')
 var fs = require('fs');
 var debug = false
-var timescaledb_host = "172.17.0.8"
+var timescaledb_host = "172.17.0.6"
 var connectionString ="postgres://postgres:password@"+timescaledb_host+":5432/example";
 
 // print process.argv

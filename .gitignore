@@ -1,0 +1,6 @@
+node_modules
+jenkins_agent
+jenkins_agent.pub
+composetest
+jenkins_configuration/
+archive

@@ -6,13 +6,13 @@ let driver;
 
 suite(function(env) {
   console.log(env)
-  describe('Basic HS', function() {
+  describe('Basic', function() {
       this.timeout(30000)
 
     before(async function() {
       driver = await new Builder()
       .forBrowser('firefox')
-      .usingServer('http://172.17.0.4:4444/wd/hub') //https://www.selenium.dev/selenium/docs/api/javascript/index.html
+      .usingServer('http://172.17.0.7:4444/wd/hub') //https://www.selenium.dev/selenium/docs/api/javascript/index.html
       .build();
     });
 
@@ -29,7 +29,7 @@ suite(function(env) {
       await driver.manage().setTimeouts({ implicit: 500 });
 
       let textBox = await driver.findElement(By.name('my-text'));
-      let submitButton = await driver.findElement(By.css('buHStton'));
+      let submitButton = await driver.findElement(By.css('button'));
 
       await textBox.sendKeys('Selenium');
       await submitButton.click();
