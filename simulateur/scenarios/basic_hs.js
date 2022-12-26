@@ -12,7 +12,7 @@ suite(function(env) {
     before(async function() {
       driver = await new Builder()
       .forBrowser('firefox')
-      .usingServer('http://172.17.0.7:4444/wd/hub') //https://www.selenium.dev/selenium/docs/api/javascript/index.html
+      .usingServer('http://selenium_ff:4444/wd/hub') //https://www.selenium.dev/selenium/docs/api/javascript/index.html
       .build();
     });
 
