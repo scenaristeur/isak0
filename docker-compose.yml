@@ -11,7 +11,7 @@ services:
     volumes:
       - ./jenkins_configuration:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
-      
+
   selenium-ff:
    image: selenium/standalone-firefox
    container_name: selenium_ff
@@ -20,8 +20,45 @@ services:
     - 4444:4444
     - 7900:7900
    environment:
-    - SE_NODE_MAX_SESSIONS:10
-    - SE_NODE_OVERRIDE_MAX_SESSIONS:true
+    - SE_NODE_MAX_SESSIONS=10
+    - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+    - SE_START_XVFB=false
+
+  timescaledb:
+    image: timescale/timescaledb-ha:pg14-latest
+    container_name: timescaledb
+    command: postgres -c shared_preload_libraries=timescaledb
+  #  networks:
+  #    - k6
+  #    - grafana
+  #    - timescaledb
+    ports:
+      - "5432:5432"
+    environment:
+      #- PGDATA=/var/lib/postgresql/data/timescaledb
+      - POSTGRES_DB=example
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    volumes:
+            # https://levelup.gitconnected.com/creating-and-filling-a-postgres-db-with-docker-compose-e1607f6f882f
+
+    #  - ./postgres-data:/var/lib/postgresql/data
+      - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+
+  #grafana:
+  #  image: grafana/grafana
+    #networks:
+    #  - grafana
+    #  - timescaledb
+  #  ports:
+  #    - "3000:3000"
+#    environment:
+  #    - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+  #    - GF_AUTH_ANONYMOUS_ENABLED=true
+  #    - GF_AUTH_BASIC_ENABLED=false
+  #  volumes:
+  #    - ./grafana:/etc/grafana/provisioning/
+
 
   agent:
    build: .

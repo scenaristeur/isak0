@@ -2,7 +2,7 @@
 
 REPORT=${WORKSPACE}/${BUILD_NUMBER}.json
 echo ${REPORT}
-cd /produits/simulateur
+cd /simulateur
  ./mocha scenarios/${SCENARIO}.js --reporter json --reporter-options output=${REPORT} --bail
 
 # echo $?

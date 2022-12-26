@@ -6,7 +6,7 @@ let seuils = {basic: 6.65, yout_visite: 20, basic_hs: 6}
 const { /*Pool,*/ Client } = require('pg')
 var fs = require('fs');
 var debug = false
-var timescaledb_host = "172.17.0.6"
+var timescaledb_host = "timescaledb"
 var connectionString ="postgres://postgres:password@"+timescaledb_host+":5432/example";
 
 // print process.argv
@@ -67,11 +67,11 @@ client.query(query, function (err, result) {
   if (err) {
     console.log(err);
   }
-  // console.log(result)
+   console.log(result)
   // console.log("inserted", query)
   // console.log("done")
   closeClient()
-  //  res.status(200).send(result.rows);
+  // res.status(200).send(result.rows);
 });
 
 

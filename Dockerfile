@@ -18,7 +18,7 @@ RUN tar -xf geckodriver-v0.32.0-linux64.tar.gz
 RUN mv /simulateur/geckodriver /usr/local/bin/
 
 
-RUN chown jenkins:jenkins /simulateur
+RUN chown -R jenkins:jenkins /simulateur
 
 COPY package*.json ./
 RUN npm install
