@@ -58,3 +58,16 @@ jobs/basic/config.xml
   <buildWrappers/>
 </project>
 ```
+
+- grafana query
+
+```
+SELECT
+  time AS "time",
+  scenario AS metric,
+  duree
+FROM executions
+WHERE
+  $__timeFilter(time)
+ORDER BY 1,2
+```
