@@ -5,67 +5,70 @@ services:
     privileged: true
     user: root
     ports:
-     - 8080:8080
-     - 50000:50000
+      - 8080:8080
+      - 50000:50000
     container_name: jenkins
     volumes:
       - ./jenkins_configuration:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
 
   selenium-ff:
-   image: selenium/standalone-firefox
-   container_name: selenium_ff
-   shm_size: 2gb
-   ports:
-    - 4444:4444
-    - 7900:7900
-   environment:
-    - SE_NODE_MAX_SESSIONS=10
-    - SE_NODE_OVERRIDE_MAX_SESSIONS=true
-    - SE_START_XVFB=false
+    image: selenium/standalone-firefox
+    container_name: selenium_ff
+    shm_size: 2gb
+    ports:
+      - 4444:4444
+      - 7900:7900
+    environment:
+      - SE_NODE_MAX_SESSIONS=10
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - SE_START_XVFB=false
 
   timescaledb:
-    image: timescale/timescaledb-ha:pg14-latest
-    container_name: timescaledb
-    command: postgres -c shared_preload_libraries=timescaledb
-  #  networks:
-  #    - k6
-  #    - grafana
-  #    - timescaledb
-    ports:
+     image: timescale/timescaledb-ha:pg14-latest
+     container_name: timescaledb
+     command: postgres -c shared_preload_libraries=timescaledb
+                #  networks:
+                #    - k6
+                #    - grafana
+                #    - timescaledb
+     ports:
       - "5432:5432"
-    environment:
+     environment:
       #- PGDATA=/var/lib/postgresql/data/timescaledb
       - POSTGRES_DB=example
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
-    volumes:
-            # https://levelup.gitconnected.com/creating-and-filling-a-postgres-db-with-docker-compose-e1607f6f882f
-
-    #  - ./postgres-data:/var/lib/postgresql/data
+     volumes:
+      # https://levelup.gitconnected.com/creating-and-filling-a-postgres-db-with-docker-compose-e1607f6f882f
+      #  - ./postgres-data:/var/lib/postgresql/data
       - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
 
-  #grafana:
-  #  image: grafana/grafana
-    #networks:
-    #  - grafana
-    #  - timescaledb
-  #  ports:
-  #    - "3000:3000"
-#    environment:
-  #    - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
-  #    - GF_AUTH_ANONYMOUS_ENABLED=true
-  #    - GF_AUTH_BASIC_ENABLED=false
-  #  volumes:
-  #    - ./grafana:/etc/grafana/provisioning/
+  grafana:
+    container_name: grafana
+    image: grafana/grafana-enterprise
+  # networks:
+  #  - grafana
+  #  - timescaledb
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_BASIC_ENABLED=false
+    restart: unless-stopped
+    volumes:
+      #https://www.theairtips.com/post/setting-up-grafana-with-docker-compose
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      #- ./grafana-data:/var/lib/grafana
 
 
   agent:
-   build: .
-   privileged: true
-   user: root
-   container_name: agent
-   expose:
-    - 22
-   environment:
-    - JENKINS_AGENT_SSH_PUBKEY=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDhQC+HdhBzRr4/B5YAUC1QuhX98USnqDr1yz2LoOaLPR16QtNwTBMgRHCsppoAdQqmUbmbAsjzV3ftOKveSXH/XJFq+OjL5CgbKzzUQ0qvnD2icZpFTY1wme6Ac5mU2OQhJb6AnNySFbiV+AZCI/8KPfPZqzbsj/YpDqkv1L5m4DA7v4+qQAGz7Jf6vKjFF6wB3pDLP91wk+slvhmGT+p7qsGd2Js+L9rZHRgCEsqkkP5N4Drxa4c+ZUfTvpnlGUA8hcxwPj2pQnj2gbk44OyUsQtBm3dbW8O+7GlPUDV61z1Ag8JBEpzFWybcPl96fVBfg/6OFDk0s4MSk78DueCMwWpvJvsgUeCp2wpKu6xGPHxy6CYqfiJDCCdQg7CsHIovd5qpashlYnVdS7EoP5cWZcuCdOF3GSYpEGH0Jh5HnKZs2UIYeJY4zv9jOw/wUKiVAByd86t/GrhF6wwSRSLHn6Jj3lJmIzRlSJfukAhQCJK86CIfJcJBv4F0KGEOZ5k= smag@smag-IdeaPad
+    build: .
+    privileged: true
+    user: root
+    container_name: agent
+    expose:
+      - 22
+    environment:
+      - JENKINS_AGENT_SSH_PUBKEY=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDhQC+HdhBzRr4/B5YAUC1QuhX98USnqDr1yz2LoOaLPR16QtNwTBMgRHCsppoAdQqmUbmbAsjzV3ftOKveSXH/XJFq+OjL5CgbKzzUQ0qvnD2icZpFTY1wme6Ac5mU2OQhJb6AnNySFbiV+AZCI/8KPfPZqzbsj/YpDqkv1L5m4DA7v4+qQAGz7Jf6vKjFF6wB3pDLP91wk+slvhmGT+p7qsGd2Js+L9rZHRgCEsqkkP5N4Drxa4c+ZUfTvpnlGUA8hcxwPj2pQnj2gbk44OyUsQtBm3dbW8O+7GlPUDV61z1Ag8JBEpzFWybcPl96fVBfg/6OFDk0s4MSk78DueCMwWpvJvsgUeCp2wpKu6xGPHxy6CYqfiJDCCdQg7CsHIovd5qpashlYnVdS7EoP5cWZcuCdOF3GSYpEGH0Jh5HnKZs2UIYeJY4zv9jOw/wUKiVAByd86t/GrhF6wwSRSLHn6Jj3lJmIzRlSJfukAhQCJK86CIfJcJBv4F0KGEOZ5k= smag@smag-IdeaPad
