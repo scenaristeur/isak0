@@ -1,0 +1,31 @@
+{
+  "name": "isak0",
+  "version": "1.0.0",
+  "description": "simulateur",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "basic": "mocha scenarios/basic.js --reporter json --reporter-options output=report.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scenaristeur/isak0.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scenaristeur/isak0/issues"
+  },
+  "homepage": "https://github.com/scenaristeur/isak0#readme",
+  "dependencies": {
+    "assert": "^2.0.0",
+    "free-proxy": "^0.2.1",
+    "ipfs": "^0.65.0",
+    "mocha": "^10.2.0",
+    "orbit-db": "^0.28.7",
+    "pg": "^8.8.0",
+    "random-word-fr": "^1.0.3",
+    "selenium-webdriver": "^4.7.1"
+  }
+}
