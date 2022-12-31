@@ -44,23 +44,23 @@ services:
       #  - ./postgres-data:/var/lib/postgresql/data
       - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
 
-  # grafana:
-  #   container_name: grafana
-  #   image: grafana/grafana-enterprise
-  # # networks:
-  # #  - grafana
-  # #  - timescaledb
-  #   ports:
-  #     - "4000:3000"
-  #   environment:
-  #     - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
-  #     - GF_AUTH_ANONYMOUS_ENABLED=true
-  #     - GF_AUTH_BASIC_ENABLED=false
-  #   restart: unless-stopped
-  #   volumes:
-  #     #https://www.theairtips.com/post/setting-up-grafana-with-docker-compose
-  #     - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
-  #     #- ./grafana-data:/var/lib/grafana
+  grafana:
+    container_name: grafana
+    image: grafana/grafana-enterprise
+  # networks:
+  #  - grafana
+  #  - timescaledb
+    ports:
+      - "4000:3000"
+    environment:
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_BASIC_ENABLED=false
+    restart: unless-stopped
+    volumes:
+      #https://www.theairtips.com/post/setting-up-grafana-with-docker-compose
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      #- ./grafana-data:/var/lib/grafana
 
 
   agent:

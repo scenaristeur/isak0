@@ -1,6 +1,5 @@
 # syntax=docker/dockerfile:1
 FROM node:18.12.1 as nodejs
-ENV NODE_ENV=production
 
 FROM jenkins/ssh-agent:latest-jdk11
 
@@ -19,14 +18,13 @@ RUN tar -xf geckodriver-v0.32.0-linux64.tar.gz
 RUN mv /simulateur/geckodriver /usr/local/bin/
 
 
-COPY ./simulateur/package*.json ./
-RUN npm install --production
+RUN chown -R jenkins:jenkins /simulateur
+
+COPY package*.json ./
+RUN npm install
 RUN node -v
 RUN npm -v
 RUN ln -s node_modules/mocha/bin/mocha.js mocha
 COPY simulateur .
-#RUN chown -R jenkins:jenkins /simulateur
-#RUN chmod +x /simulateur/plugins/core/*.sh
-#RUN chmod +x /simulateur/plugins/timescale/*.js
 #RUN cd /simulateur && ls -a &&  ./mocha scenarios/basic.js
 #CMD ["node", "test.js"]

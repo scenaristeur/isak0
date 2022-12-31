@@ -1,3 +1,4 @@
+docker-compose up --build
 
 docker-compose up -d
 
@@ -10,6 +11,11 @@ ssh-keygen -t rsa -f jenkins_agent
 
 pour reconstruire l'image
 `docker-compose up --build`
+
+
+ou copier un fichier
+
+~/dev/isak0/simulateur/scenarios$ docker cp train.js agent:/simulateur/scenarios/
 
 
 
